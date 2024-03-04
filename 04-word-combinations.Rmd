@@ -321,7 +321,9 @@ At this point, we could visualize bigrams in other works, such as the King James
 ```{r eval = FALSE}
 # the King James version is book 10 on Project Gutenberg:
 library(gutenbergr)
-kjv <- gutenberg_download(10)
+# kjv <- gutenberg_download(10) # doesn't work
+kjv <- gutenberg_download(35)
+
 ```
 
 ```{r kjv, echo = FALSE}
@@ -335,11 +337,19 @@ kjv_bigrams <- kjv %>%
   count_bigrams()
 
 # filter out rare combinations, as well as digits
+# kjv_bigrams %>%
+#   filter(n > 40,
+#          !str_detect(word1, "\\d"),
+#          !str_detect(word2, "\\d")) %>%
+#   visualize_bigrams()
+
 kjv_bigrams %>%
-  filter(n > 40,
-         !str_detect(word1, "\\d"),
-         !str_detect(word2, "\\d")) %>%
+  filter(n > 2,
+         !str_detect(word1, "NA"),
+         !str_detect(word2, "NA")) %>%
   visualize_bigrams()
+
+
 ```
 
 Figure \@ref(fig:kjvbigrams) thus lays out a common "blueprint" of language within the Bible, particularly focused around "thy" and "thou" (which could probably be considered stopwords!) You can use the gutenbergr package and these `count_bigrams`/`visualize_bigrams` functions to visualize bigrams in other classic books you're interested in.
@@ -361,6 +371,7 @@ We'll examine some of the ways tidy text can be turned into a wide matrix in Cha
 Consider the book "Pride and Prejudice" divided into 10-line sections, as we did (with larger sections) for sentiment analysis in Chapter \@ref(sentiment). We may be interested in what words tend to appear within the same section.
 
 ```{r austen_section_words}
+library(janeaustenr)
 austen_section_words <- austen_books() %>%
   filter(book == "Pride & Prejudice") %>%
   mutate(section = row_number() %/% 10) %>%

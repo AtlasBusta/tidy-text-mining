@@ -333,7 +333,7 @@ p_and_p_sentences <- tibble(text = prideprejudice) %>%
 Let's look at just one.
 
 ```{r PandPsentences, dependson = "PandP"}
-p_and_p_sentences$sentence[2]
+p_and_p_sentences$sentence[5]
 ```
 
 The sentence tokenizing does seem to have a bit of trouble with UTF-8 encoded text, especially with sections of dialogue; it does much better with punctuation in ASCII. One possibility, if this is important, is to try using `iconv()`, with something like `iconv(text, to = 'latin1')` in a mutate statement before unnesting.
